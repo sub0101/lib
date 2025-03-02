@@ -28,14 +28,27 @@ func (uc *UserController) UpdateUser(c *gin.Context) {
 }
 
 func (uc *UserController) GetUser(c *gin.Context) {
-
+	readerId, valid := getParamItem(c, "id")
+	if !valid {
+		utility.SendResponse(c, 400, false, "Invalid Input", nil)
+		return
+	}
+	libId := getContextItem(c, "libId")
+	userId := getContextItem(c, "id")
+	user, err := uc.userService.GetUser(userId, readerId, libId)
+	if err != nil {
+		utility.SendResponse(c, 500, false, err.Message, nil, err.Details)
+		return
+	}
+	utility.SendResponse(c, 200, true, "Successfully fetched user", user)
 }
 func (uc *UserController) GetAllUser(c *gin.Context) {
 	libId := getContextItem(c, "libId")
 	userId := getContextItem(c, "id")
+
 	users, err := uc.userService.GetAllUser(libId, userId)
 	if err != nil {
-		utility.SendResponse(c, 200, true, "failed to fetch all users", nil, err.Error())
+		utility.SendResponse(c, 500, true, "failed to fetch all users", nil, err.Error())
 		return
 
 	}

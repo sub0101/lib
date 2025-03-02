@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"fmt"
-	"libraryManagement/internal/models"
 	"libraryManagement/utility"
 	"net/http"
 	"strings"
@@ -11,26 +10,6 @@ import (
 	"github.com/golang-jwt/jwt/v5"
 	"gorm.io/gorm"
 )
-
-func ValidateRefreshToken(db *gorm.DB) gin.HandlerFunc {
-	return func(c *gin.Context) {
-		var user models.Auth
-		db.Model(&models.Auth{}).Joins("join users us on us.email = auths.email").First(&user)
-		token := user.RefreshToken
-		// if token == "" {
-		// 	c.Next()
-		// 	return
-		// }
-		fmt.Println(token)
-		_, err := utility.VerifyToken(token)
-		if err != nil {
-			utility.SendResponse(c, 401, false, "Unauthorized", nil, err.Error())
-			c.Abort()
-		}
-
-		c.Next()
-	}
-}
 
 func IsAuth(roles ...string) gin.HandlerFunc {
 
@@ -76,6 +55,25 @@ func IsAuth(roles ...string) gin.HandlerFunc {
 			utility.SendResponse(c, http.StatusForbidden, false, "Page Not Found", nil)
 			c.Abort()
 		}
+
 	}
 
+}
+
+func ValidateRefreshToken(db *gorm.DB) gin.HandlerFunc {
+	return func(c *gin.Context) {
+		// var user models.Auth
+
+		// db.Model(&models.Auth{}).Joins("join users us on us.email = auths.email").First(&user)
+		// token := user.RefreshToken
+		// log.Printf("token:%v \n", token)
+		// _, err := utility.VerifyToken(token)
+		// if err != nil {
+
+		// 	utility.SendResponse(c, 401, false, "Unauthorized", nil, err.Error())
+		// 	c.Abort()
+		// }
+
+		c.Next()
+	}
 }
