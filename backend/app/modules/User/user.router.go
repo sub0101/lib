@@ -17,5 +17,6 @@ func SetupUserRouter(router *gin.RouterGroup, db *gorm.DB) {
 		userRouter.GET("/:id", middleware.IsAuth(), userController.GetUser)
 		userRouter.GET("/", middleware.IsAuth("owner", "admin"), userController.GetAllUser)
 		userRouter.PATCH("/make_admin", middleware.IsAuth("owner"), userController.MakeAdmin)
+		userRouter.DELETE("/", middleware.IsAuth("owner"), userController.DeleteUser)
 	}
 }

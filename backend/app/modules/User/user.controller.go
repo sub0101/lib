@@ -73,6 +73,19 @@ func (uc *UserController) MakeAdmin(c *gin.Context) {
 	utility.SendResponse(c, 201, true, "Successfully Change Role of the user", nil)
 }
 
+func (uc *UserController) DeleteUser(c *gin.Context) {
+
+	userId := getQueryItem(c, "id")
+	ownerId := getContextItem(c, "id")
+	ownerLibId := getContextItem(c, "libId")
+	err := uc.userService.DeleteUser(userId, ownerId, ownerLibId)
+	if err != nil {
+		utility.SendResponse(c, 500, false, "Failed to delete user", nil, err.Error())
+		return
+	}
+	utility.SendResponse(c, 200, true, "Successfully deleted user", nil)
+}
+
 func getQueryItem(c *gin.Context, id string) uint {
 	idQuery := c.Query(id)
 	libId, _ := strconv.Atoi(idQuery)

@@ -5,6 +5,7 @@ import (
 	"libraryManagement/internal/dto"
 	"libraryManagement/internal/models"
 	"libraryManagement/utility"
+	"log"
 
 	"gorm.io/gorm"
 )
@@ -29,7 +30,7 @@ func (service *AuthService) Login(body dto.RequestLoginBody) (uint, uint, string
 		return 0, 0, "", fmt.Errorf("Invalid email or  Password")
 	}
 	DB.Where("email = ?", email).First(&user)
-
+	log.Printf("user %v", user.Role)
 	refreshToken, _ := utility.
 		CreateJwtToken(utility.JwtPayload{LibId: user.LibId, Id: user.ID, Role: user.Role})
 

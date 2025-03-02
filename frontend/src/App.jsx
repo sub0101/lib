@@ -15,7 +15,7 @@ import ReaderDashboard from './components/reader/ReaderDashBoard';
 import BookTracking from './components/reader/tracking';
 import IssueNewBook from './components/reader/issue-book';
 import IssuedBooks from './components/reader/IssuedBooks';
-import Dashboard from './components/Admin/DashBoard';
+import Dashboard from './components/Admin/dashboard';
 import ViewBooks from './components/reader/books';
 function App() {
   return (
@@ -39,7 +39,7 @@ function App() {
         <Route element={<PrivateOutlet />} >
           <Route element={<Home requiredRole={["admin", "owner"]} />} >
             <Route path="/admin" element={<AdminPage />} >
-            <Route path='' element ={<Dashboard />} />
+            <Route path='' element ={<Dashboard/>} />
             <Route path='users' element ={<Users/>} />
             <Route path='books' element={<Books />} />
             </Route>  

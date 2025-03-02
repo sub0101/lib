@@ -21,6 +21,18 @@ func NewAuthController(db *gorm.DB) *AuthController {
 	return &AuthController{authService: authService}
 }
 
+// LoginController godoc
+// @Summary Authenticate user and return JWT token
+// @Description Allows registered users to log in and receive a JWT token for authentication.
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param request body dto.RequestLoginBody true "User Login Data"
+// @Success 200 {object} dto.BaseResponse "Successfully authenticated"
+// @Failure 400 {object} dto.BaseResponse "Bad Request"
+// @Failure 401 {object} dto.BaseResponse "Unauthorized"
+// @Failure 500 {object} dto.BaseResponse "Internal Server Error"
+// @Router /auth/login [post]
 func (ac *AuthController) Login(c *gin.Context) {
 	var body dto.RequestLoginBody
 	if err := c.ShouldBindBodyWithJSON(&body); err != nil {
@@ -35,8 +47,9 @@ func (ac *AuthController) Login(c *gin.Context) {
 		return
 	}
 	token, err := utility.CreateJwtToken(utility.JwtPayload{LibId: libId, Id: id, Role: role})
+
 	c.SetCookie("jwt", token, 3600, "/", "localhost", false, true)
-	utility.SendResponse(c, 200, true, "Successfully Logedin", token)
+	utility.SendResponse(c, 200, true, "Successfully Logged in", token)
 }
 
 func (ac *AuthController) SignupLibrary(c *gin.Context) {

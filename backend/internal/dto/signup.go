@@ -33,3 +33,10 @@ type RequestLoginBody struct {
 type JwtResponse struct {
 	token string
 }
+
+type BaseResponse struct {
+	Success bool        `json:"success"` // Example `false` for error cases
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+	Error   string      `json:"error,omitempty"`
+}

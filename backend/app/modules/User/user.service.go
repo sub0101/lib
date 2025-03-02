@@ -19,7 +19,7 @@ func (userService *UserService) UpdateUser(userId uint, ownerId uint, ownerLibId
 		return fmt.Errorf("Owner can not change his own role")
 	}
 	if err := db.Where("id=? AND lib_id=?", userId, ownerLibId).First(&reader); err.Error != nil {
-		return fmt.Errorf("Can not find user with given data")
+		return errorss.InternalServerError("Can not find user with given data", "Can not find user with given data")
 	}
 	db.Where("id=?", userId).Updates(&models.User{Role: role})
 	return nil
@@ -56,4 +56,25 @@ func (UserService *UserService) GetUser(userId, readerId, libId uint) (*models.U
 		return nil, errorss.InternalServerError("You are not authorized to view this user", "You are not authorized to view this user")
 	}
 
+}
+
+func (userService *UserService) DeleteUser(userId, ownerId, ownerLibId uint) *errorss.AppError {
+	db := userService.DB
+	var user = models.User{}
+	if userId == ownerId {
+		return errorss.InternalServerError("Owner can not delete his own account", "Owner can not delete his own account")
+	}
+	result := db.Transaction(func(tx *gorm.DB) error {
+		if err := tx.Where("id=? AND lib_id=?", userId, ownerLibId).First(&user); err.Error != nil {
+			return errorss.InternalServerError("Can not find user with given data", "Can not find user with given data")
+		}
+
+		tx.Delete(&user)
+		tx.Where("email=?", user.Email).Delete(&models.Auth{})
+		return nil
+	})
+	if result != nil {
+		return errorss.InternalServerError("Can not delete user", result.Error())
+	}
+	return nil
 }
