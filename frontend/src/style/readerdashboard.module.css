@@ -1,0 +1,44 @@
+.dashboard {
+    padding: 20px;
+  }
+  
+  .statsContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+  
+  .statCard {
+    background-color: #f0f0f0;
+    border-radius: 8px;
+    padding: 20px;
+    width: 30%;
+    text-align: center;
+  }
+  
+  .statCard h2 {
+    margin-bottom: 10px;
+    font-size: 18px;
+  }
+  
+  .statCard p {
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .issueButton {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #4caf50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .issueButton:hover {
+    background-color: #45a049;
+  }
+  
+  

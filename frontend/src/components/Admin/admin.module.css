@@ -1,0 +1,99 @@
+.adminDashboard,
+.adminUsers,
+.adminBooks {
+  padding: 20px 0;
+}
+
+.adminDashboard .card {
+  margin-top: 30px;
+}
+
+.bookGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.bookCard {
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.bookCard:hover {
+  transform: translateY(-5px);
+}
+
+.bookCover {
+  height: 200px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 14px;
+}
+
+.bookCover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bookDetails {
+  padding: 15px;
+}
+
+.bookTitle {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.bookAuthor {
+  color: #666;
+  margin-bottom: 10px;
+}
+
+.bookMeta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #777;
+  margin-top: 10px;
+}
+
+.filterContainer {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filterItem {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.filterLabel {
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.filterSelect {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  background-color: white;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
+}
+
