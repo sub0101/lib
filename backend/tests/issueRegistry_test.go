@@ -12,7 +12,7 @@ import (
 //		setupTestDB()
 //	}
 func TestGetAllIssues(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	SetupTestUsers()
@@ -55,4 +55,5 @@ func TestGetAllIssues(t *testing.T) {
 		})
 	}
 	// TearDownTestDB()
+	stopTransaction()
 }

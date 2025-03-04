@@ -13,7 +13,7 @@ import (
 )
 
 func TestMakeAdmin(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -95,11 +95,12 @@ func TestMakeAdmin(t *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestGetUser(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -165,11 +166,12 @@ func TestGetUser(t *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestGetAllUser(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	SetupTestUsers()
@@ -212,10 +214,11 @@ func TestGetAllUser(t *testing.T) {
 		})
 	}
 	// TearDownTestDB()
+	stopTransaction()
 }
 
 func TestDeleteUser(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -273,4 +276,5 @@ func TestDeleteUser(t *testing.T) {
 		})
 	}
 	// TearDownTestDB()
+	stopTransaction()
 }

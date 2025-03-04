@@ -35,6 +35,7 @@ func (requestService *RequestEventService) AddRequest(libId uint, requestPayload
 	}
 	fmt.Println(requestPayload.RequestType)
 	if requestPayload.RequestType == "return" {
+
 		result := db.Where("isbn = ? AND reader_id = ? AND issue_status = ? ", book.ISBN, requestPayload.ReaderID, "issued").First(&models.IssueRegistery{})
 		if err := result.Error; err != nil {
 
@@ -105,7 +106,7 @@ func (requestService *RequestEventService) GetRequest(reader_id, reqId uint) (*m
 	return &request, nil
 }
 
-func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId uint, statusType dto.RequestIssueStatus) error {
+func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId uint, statusType dto.RequestIssueStatus) *errorss.AppError {
 
 	DB := requestService.db
 	currentTime := time.Now()
@@ -116,10 +117,19 @@ func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId ui
 	DB.Where("id=?", userId).First(&user)
 	if result := DB.Where("req_id = ?", reqId).First(&request); result.Error != nil {
 
-		return result.Error
+		return errorss.NotFound("Request Not Found", "request not found")
 	}
+	if request.RequestStatus != "pending" {
+		return errorss.BadRequest("Request Already Processed", "request already processed")
+	}
+
+	// if err := DB.Where("req_id = ? AND request_status =?", reqId, "pending").
+	// 	First(&models.RequestEvent{}).Error; err != nil {
+	// 	return errorss.NotFound("no request found", "request not found")
+	// }
+
 	if !isRequestBelong(DB, user, request) {
-		return fmt.Errorf("no request found")
+		return errorss.Forbidden("not authorized", "you are not authorized to update this request")
 	}
 
 	res := DB.Transaction(func(tx *gorm.DB) error {
@@ -127,12 +137,12 @@ func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId ui
 		result := tx.Model(&models.RequestEvent{}).Where("req_id =?", reqId).Updates(&models.RequestEvent{ApprovalDate: &currentTime, ApproverID: userId, RequestStatus: statusType.Type})
 		if result.Error != nil {
 			fmt.Println("not able to update the request")
-			return result.Error
+			return errorss.BadRequest("failed to update request", "failed to update request")
 		}
 		if statusType.Type == "accepted" {
 
 			if err := tx.Where("id = ?", request.BookID).First(&book).Error; err != nil {
-				return fmt.Errorf("Book Not Found")
+				return errorss.NotFound("book bot found", "book not found")
 			}
 
 			if request.RequestType == "return" {
@@ -151,8 +161,10 @@ func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId ui
 		}
 		return nil
 	})
-
-	return res
+	if res != nil {
+		return errorss.InternalServerError("Failed to update request", "failed to update request")
+	}
+	return nil
 }
 
 func (requestService *RequestEventService) GetUserRequests(userId uint) ([]models.RequestEvent, error) {

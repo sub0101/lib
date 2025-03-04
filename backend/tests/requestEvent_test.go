@@ -19,7 +19,7 @@ import (
 var tempBookId uint
 
 func TestAddIssueRequest(test *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	SetupTestUsers()
@@ -88,12 +88,13 @@ func TestAddIssueRequest(test *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
+	stopTransaction()
 	// TearDownTestDB()
 
 }
 
 func TestUpdateRequest(test *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -105,8 +106,6 @@ func TestUpdateRequest(test *testing.T) {
 	newReqId := CreateTempRequest(readerId, bookId, "return")
 
 	ownerToken := GetJwtOwnerToken()
-	// CreateTempOwner()
-	// tempReaderToken := CreateTempReader()
 
 	tests := []struct {
 		name          string
@@ -127,14 +126,14 @@ func TestUpdateRequest(test *testing.T) {
 			expectedCode: 200,
 		},
 		{
-			name: "Update Request with Reject status Valid Request ID",
+			name: "Update Already Accepted Request with Reject status",
 			request: map[string]interface{}{
 
 				"requestType": "rejected",
 			},
 			token:        ownerToken,
 			params:       reqId,
-			expectedCode: 200,
+			expectedCode: 400,
 		},
 		{
 			name: "Update Request with InValid Request ID",
@@ -256,7 +255,7 @@ func TestUpdateRequest(test *testing.T) {
 			},
 			token:        ownerToken,
 			params:       newReqId,
-			expectedCode: 200,
+			expectedCode: 400,
 		},
 		{
 			name: "Update Return Request with  Inavlid Request Type",
@@ -279,13 +278,12 @@ func TestUpdateRequest(test *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
-	// TearDownTestDB()
 
-	// TearDownTestDB()
+	stopTransaction()
 }
 
 func TestGetAllRequests(test *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -334,12 +332,12 @@ func TestGetAllRequests(test *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestGetUserRequests(test *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -388,13 +386,12 @@ func TestGetUserRequests(test *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestDeleteRequest(test *testing.T) {
 
-	setupTestDB()
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -454,12 +451,12 @@ func TestDeleteRequest(test *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestGetRequestById(test *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -518,6 +515,6 @@ func TestGetRequestById(test *testing.T) {
 			assert.Equal(t, tt.expectedCode, res.Code)
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }

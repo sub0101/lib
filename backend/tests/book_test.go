@@ -4,39 +4,15 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"libraryManagement/app/middleware"
-	book "libraryManagement/app/modules/Book"
 	"net/http"
 	"net/http/httptest"
 	"testing"
 
-	"github.com/gin-gonic/gin"
 	"github.com/stretchr/testify/assert"
-	"gorm.io/gorm"
 )
 
-// func init() {
-// 	setupTestDB()
-// }
-
-func SetupBookRouter(router *gin.Engine, db *gorm.DB) {
-	bookController := book.NewBookController(db)
-
-	bookRouter := router.Group("/api/v1")
-	{
-
-		bookRouter.GET("/books", middleware.IsAuth(), bookController.GetAllBook)
-		bookRouter.GET("/books/issued", middleware.IsAuth(), bookController.GetIssuedBooks)
-		bookRouter.GET("/books/:id", middleware.IsAuth(), bookController.GetBook)
-		bookRouter.POST("/books", middleware.IsAuth("owner", "admin"), bookController.AddBook)
-		bookRouter.PATCH("/:id", middleware.IsAuth("owner", "admin"), bookController.UpdateBook)
-		bookRouter.DELETE("/:id", middleware.IsAuth("owner", "admin"), bookController.DeleteBook)
-		bookRouter.GET("/search", middleware.IsAuth(), bookController.SearchBooks)
-	}
-}
-
 func TestAddBooks(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	SetupTestUsers()
@@ -146,12 +122,12 @@ func TestAddBooks(t *testing.T) {
 
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestGetAllBooks(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	SetupTestLibrary()
 	SetupTestUsers()
@@ -200,12 +176,12 @@ func TestGetAllBooks(t *testing.T) {
 			// }
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestGetBookDetail(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	SetupTestUsers()
@@ -262,11 +238,12 @@ func TestGetBookDetail(t *testing.T) {
 
 		})
 	}
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestUpdateBook(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -341,12 +318,12 @@ func TestUpdateBook(t *testing.T) {
 
 		})
 	}
-
+	stopTransaction()
 	// TearDownTestDB()
 }
 
 func TestDeleteBook(t *testing.T) {
-	setupTestDB()
+
 	router := SetupRouter()
 	libId, _ := SetupTestLibrary()
 	readerId := SetupTestUsers()
@@ -411,6 +388,7 @@ func TestDeleteBook(t *testing.T) {
 
 		})
 	}
+	stopTransaction()
 
 	// TearDownTestDB()
 }

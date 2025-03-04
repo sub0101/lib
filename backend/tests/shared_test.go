@@ -89,9 +89,10 @@ func CreateTempRequest(userId uint, bookId uint, reqType string) uint {
 	// 	RequestType: "issue",
 	// }
 	var requestEvent = models.RequestEvent{
-		BookID:      bookId,
-		RequestType: reqType,
-		ReaderID:    userId,
+		BookID:        bookId,
+		RequestType:   reqType,
+		ReaderID:      userId,
+		RequestStatus: "pending",
 	}
 
 	if result := db.Model(models.RequestEvent{}).Create(&requestEvent); result.Error != nil {

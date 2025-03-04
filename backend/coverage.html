@@ -93,7 +93,7 @@
 				
 				<option value="file18">libraryManagement/app/modules/requestEvent/requestEvent.router.go (100.0%)</option>
 				
-				<option value="file19">libraryManagement/app/modules/requestEvent/requestEvent.service.go (82.5%)</option>
+				<option value="file19">libraryManagement/app/modules/requestEvent/requestEvent.service.go (82.2%)</option>
 				
 				<option value="file20">libraryManagement/app/routes/router.go (0.0%)</option>
 				
@@ -107,7 +107,7 @@
 				
 				<option value="file25">libraryManagement/utility/encyption.go (75.0%)</option>
 				
-				<option value="file26">libraryManagement/utility/errorss/errors.go (50.0%)</option>
+				<option value="file26">libraryManagement/utility/errorss/errors.go (66.7%)</option>
 				
 				<option value="file27">libraryManagement/utility/jwt.go (78.6%)</option>
 				
@@ -342,10 +342,10 @@ func (bookController *BookController) DeleteBook(c *gin.Context) <span class="co
         }</span>
 
         <span class="cov8" title="1">if err := bookController.bookService.DeleteBook(bookId, userId); err != nil </span><span class="cov8" title="1">{
-                utility.SendResponse(c, err.Code, false, err.Message, nil, err.Details)
+                utility.SendResponse(c, err.Code, false, err.Message, nil)
                 return
         }</span>
-        <span class="cov8" title="1">utility.SendResponse(c, 200, true, "Successfully Deleted the  Book", nil, "book deleted successfully")</span>
+        <span class="cov8" title="1">utility.SendResponse(c, 200, true, "Successfully Deleted the  Book", nil)</span>
 }
 
 func (bookController *BookController) UpdateBook(c *gin.Context) <span class="cov8" title="1">{
@@ -461,7 +461,7 @@ func SetupBookRouter(router *gin.RouterGroup, db *gorm.DB) <span class="cov8" ti
                 bookRouter.Use(middleware.ValidateRefreshToken(db))
 
                 bookRouter.GET("/", middleware.IsAuth(), bookController.GetAllBook)
-                bookRouter.GET("/issued", middleware.IsAuth(), bookController.GetIssuedBooks)
+                bookRouter.GET("/issued", middleware.IsAuth("reader"), bookController.GetIssuedBooks)
                 bookRouter.GET("/:id", middleware.IsAuth(), bookController.GetBook)
                 bookRouter.POST("/", middleware.IsAuth("owner", "admin"), bookController.AddBook)
                 bookRouter.PATCH("/:id", middleware.IsAuth("owner", "admin"), bookController.UpdateBook)
@@ -1655,6 +1655,7 @@ func (requestService *RequestEventService) AddRequest(libId uint, requestPayload
         }</span>
         <span class="cov8" title="1">fmt.Println(requestPayload.RequestType)
         if requestPayload.RequestType == "return" </span><span class="cov8" title="1">{
+
                 result := db.Where("isbn = ? AND reader_id = ? AND issue_status = ? ", book.ISBN, requestPayload.ReaderID, "issued").First(&amp;models.IssueRegistery{})
                 if err := result.Error; err != nil </span><span class="cov0" title="0">{
 
@@ -1725,7 +1726,7 @@ func (requestService *RequestEventService) GetRequest(reader_id, reqId uint) (*m
         <span class="cov8" title="1">return &amp;request, nil</span>
 }
 
-func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId uint, statusType dto.RequestIssueStatus) error <span class="cov8" title="1">{
+func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId uint, statusType dto.RequestIssueStatus) *errorss.AppError <span class="cov8" title="1">{
 
         DB := requestService.db
         currentTime := time.Now()
@@ -1736,10 +1737,19 @@ func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId ui
         DB.Where("id=?", userId).First(&amp;user)
         if result := DB.Where("req_id = ?", reqId).First(&amp;request); result.Error != nil </span><span class="cov8" title="1">{
 
-                return result.Error
+                return errorss.NotFound("Request Not Found", "request not found")
         }</span>
+        <span class="cov8" title="1">if request.RequestStatus != "pending" </span><span class="cov8" title="1">{
+                return errorss.BadRequest("Request Already Processed", "request already processed")
+        }</span>
+
+        // if err := DB.Where("req_id = ? AND request_status =?", reqId, "pending").
+        //         First(&amp;models.RequestEvent{}).Error; err != nil {
+        //         return errorss.NotFound("no request found", "request not found")
+        // }
+
         <span class="cov8" title="1">if !isRequestBelong(DB, user, request) </span><span class="cov0" title="0">{
-                return fmt.Errorf("no request found")
+                return errorss.Forbidden("not authorized", "you are not authorized to update this request")
         }</span>
 
         <span class="cov8" title="1">res := DB.Transaction(func(tx *gorm.DB) error </span><span class="cov8" title="1">{
@@ -1747,12 +1757,12 @@ func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId ui
                 result := tx.Model(&amp;models.RequestEvent{}).Where("req_id =?", reqId).Updates(&amp;models.RequestEvent{ApprovalDate: &amp;currentTime, ApproverID: userId, RequestStatus: statusType.Type})
                 if result.Error != nil </span><span class="cov0" title="0">{
                         fmt.Println("not able to update the request")
-                        return result.Error
+                        return errorss.BadRequest("failed to update request", "failed to update request")
                 }</span>
                 <span class="cov8" title="1">if statusType.Type == "accepted" </span><span class="cov8" title="1">{
 
                         if err := tx.Where("id = ?", request.BookID).First(&amp;book).Error; err != nil </span><span class="cov0" title="0">{
-                                return fmt.Errorf("Book Not Found")
+                                return errorss.NotFound("book bot found", "book not found")
                         }</span>
 
                         <span class="cov8" title="1">if request.RequestType == "return" </span><span class="cov8" title="1">{
@@ -1771,8 +1781,10 @@ func (requestService *RequestEventService) UpdateRequest(libId, reqId, userId ui
                 }
                 <span class="cov8" title="1">return nil</span>
         })
-
-        <span class="cov8" title="1">return res</span>
+        <span class="cov8" title="1">if res != nil </span><span class="cov0" title="0">{
+                return errorss.InternalServerError("Failed to update request", "failed to update request")
+        }</span>
+        <span class="cov8" title="1">return nil</span>
 }
 
 func (requestService *RequestEventService) GetUserRequests(userId uint) ([]models.RequestEvent, error) <span class="cov8" title="1">{
@@ -1906,7 +1918,7 @@ const docTemplate = `{
 var SwaggerInfo = &amp;swag.Spec{
         Version:          "1.0",
         Host:             "localhost:8000",
-        BasePath:         "/api/v1/",
+        BasePath:         "/api/v1",
         Schemes:          []string{"http"},
         Title:            "Library Management API",
         Description:      "API for managing a library.",
@@ -1971,7 +1983,7 @@ func InitDB() (error, *gorm.DB) <span class="cov0" title="0">{
 // @license.url http://www.apache.org/licenses/LICENSE-2.0.html
 
 // @host localhost:8000
-// @BasePath /api/v1/
+// @BasePath /api/v1
 // @schemes http
 
 import (
@@ -2003,7 +2015,7 @@ func main() <span class="cov0" title="0">{
 
         // server.Use(ValidateRefreshToken(db))
         // server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-        server.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+        server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
         router := server.Group("/api/v1")
         routes.SetupRouter(router, db)
@@ -2064,7 +2076,7 @@ type AppError struct {
         Details string // Optional debugging details
 }
 
-func (e *AppError) Error() string <span class="cov0" title="0">{
+func (e *AppError) Error() string <span class="cov8" title="1">{
         return fmt.Sprintf("[%d] %s: %s", e.Code, e.Message, e.Details)
 }</span>
 

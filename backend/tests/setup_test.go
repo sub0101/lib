@@ -45,8 +45,6 @@ func setupTestDB() {
 
 	db.AutoMigrate(&models.Auth{}, &models.BookInventory{}, &models.User{})
 	dbb = db
-	// SetupTestLibrary()
-	// SetupTestUsers()
 
 }
 
@@ -158,10 +156,6 @@ func SetupTestUsers() uint {
 	testReaderToken, _ = utility.CreateJwtToken(utility.JwtPayload{Id: testUser.ID, Role: testUser.Role, LibId: testUser.LibId})
 	return testUser.ID
 }
-
-// func TearDownTestDB() {
-// 	ClearTestDB()
-// }
 
 func ClearTestDB() {
 	err := testDB.Exec("TRUNCATE TABLE libraries, auths, users, book_inventories, issue_registeries, request_events RESTART IDENTITY CASCADE").Error
