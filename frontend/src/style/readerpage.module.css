@@ -1,0 +1,52 @@
+.readerPage {
+    display: flex;
+    height: 100vh;
+  }
+  
+  .content {
+    flex-grow: 1;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  .contentArea {
+    padding: 20px;
+    flex: 1;
+  }
+  .mainContent {
+    flex: 1;
+    margin-left: 250px;
+    width: calc(100% - 250px);
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .contentArea {
+    padding: 20px;
+    flex: 1;
+  }
+  
+  /* Responsive Styles */
+  @media (max-width: 768px) {
+    .sidebar {
+      width: 70px;
+    }
+  
+    .menuItem span {
+      display: none;
+    }
+  
+    .logo h2 {
+      font-size: 0;
+    }
+  
+    .logo h2::first-letter {
+      font-size: 24px;
+    }
+  
+    .mainContent {
+      margin-left: 70px;
+      width: calc(100% - 70px);
+    }
+  }
+  

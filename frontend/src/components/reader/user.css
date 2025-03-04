@@ -1,0 +1,110 @@
+.user-dashboard,
+.user-issue-book,
+.user-tracking {
+  padding: 20px 0;
+}
+
+.book-catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.issue-form {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.book-details-preview {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--light-color);
+}
+
+.book-details-preview h3 {
+  margin-bottom: 10px;
+}
+
+.book-details-preview p {
+  margin-bottom: 5px;
+}
+
+.tracking-filters {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.tracking-status {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+}
+
+.status-dot.issued {
+  background-color: var(--warning-color);
+}
+
+.status-dot.returned {
+  background-color: var(--secondary-color);
+}
+
+.status-dot.overdue {
+  background-color: var(--danger-color);
+}
+
+.timeline {
+  position: relative;
+  margin: 20px 0;
+  padding-left: 30px;
+}
+
+.timeline::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 10px;
+  width: 2px;
+  background-color: var(--border-color);
+}
+
+.timeline-item {
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.timeline-item::before {
+  content: "";
+  position: absolute;
+  left: -30px;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: var(--primary-color);
+}
+
+.timeline-date {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 5px;
+}
+
+.timeline-content {
+  padding: 15px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+

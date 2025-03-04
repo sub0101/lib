@@ -1,0 +1,83 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Container */
+  .adminContainer {
+    width: 80%;
+    margin: 50px auto;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Title */
+  .adminTitle {
+    text-align: center;
+    margin-bottom: 30px;
+    font-size: 2rem;
+    color: #333;
+  }
+  
+  /* Table */
+  .requestTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .requestTable th,
+  .requestTable td {
+    padding: 12px;
+    text-align: center;
+    border: 1px solid #ddd;
+  }
+  
+  .requestTable th {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .requestTable tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  .requestTable td {
+    font-size: 1rem;
+    color: #333;
+  }
+  
+  /* Action Buttons */
+  .actionButtons {
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .approveButton,
+  .rejectButton {
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  .approveButton {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .approveButton:hover {
+    background-color: #45a049;
+  }
+  
+  .rejectButton {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .rejectButton:hover {
+    background-color: #d32f2f;
+  }
+  

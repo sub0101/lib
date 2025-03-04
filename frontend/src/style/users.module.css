@@ -1,0 +1,182 @@
+.usersPage {
+    padding: 20px 0;
+  }
+  
+  .pageHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+  }
+  
+  .pageTitle {
+    font-size: 24px;
+    font-weight: 600;
+    color: #34495e;
+  }
+  
+  .addButton {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .addButton:hover {
+    background-color: #2980b9;
+  }
+  
+  .searchContainer {
+    margin-bottom: 20px;
+  }
+  
+  .searchInput {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px 15px;
+    border: 1px solid #bdc3c7;
+    border-radius: 4px;
+    font-size: 14px;
+  }
+  
+  .tableCard {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .tableContainer {
+    overflow-x: auto;
+  }
+  
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .table th,
+  .table td {
+    padding: 12px 15px;
+    text-align: left;
+    border-bottom: 1px solid #ecf0f1;
+  }
+  
+  .table th {
+    background-color: #f5f7fa;
+    font-weight: 600;
+  }
+  
+  .table tr:hover {
+    background-color: rgba(236, 240, 241, 0.5);
+  }
+  
+  .badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  
+  .badgeSuccess {
+    background-color: rgba(46, 204, 113, 0.2);
+    color: #27ae60;
+  }
+  
+  .badgeWarning {
+    background-color: rgba(243, 156, 18, 0.2);
+    color: #d35400;
+  }
+  
+  .badgeDanger {
+    background-color: rgba(231, 76, 60, 0.2);
+    color: #c0392b;
+  }
+  
+  .actionButtons {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .editButton,
+  .deleteButton {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+  }
+  
+  .editButton {
+    background-color: #3498db;
+    color: white;
+  }
+  
+  .editButton:hover {
+    background-color: #2980b9;
+  }
+  
+  .deleteButton {
+    background-color: #e74c3c;
+    color: white;
+  }
+  
+  .deleteButton:hover {
+    background-color: #c0392b;
+  }
+  
+  
+
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modalContent {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    text-align: center;
+  }
+  
+  .modalActions {
+    margin-top: 20px;
+  }
+  
+  .cancelButton,
+  .okButton {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .cancelButton {
+    background-color: gray;
+    color: white;
+  }
+  
+  .okButton {
+    background-color: green;
+    color: white;
+    margin-left: 5px;
+    
+  }
+  
