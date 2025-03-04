@@ -15,7 +15,7 @@ import ReaderDashboard from './components/reader/ReaderDashBoard';
 import BookTracking from './components/reader/tracking';
 import IssueNewBook from './components/reader/issue-book';
 import IssuedBooks from './components/reader/IssuedBooks';
-import Dashboard from './components/Admin/DashBoard';
+import Dashboard from './components/Admin/Dashboard';
 import ViewBooks from './components/reader/books';
 import ManageRequests from './components/Admin/ManageRequests';
 function App() {

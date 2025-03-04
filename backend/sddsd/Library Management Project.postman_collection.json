@@ -1,0 +1,1413 @@
+{
+	"info": {
+		"_postman_id": "efa6c269-cf3e-4c74-8d6a-b6aa0883aed9",
+		"name": "Library Management Project",
+		"description": "The **Library Management System** is a web-based application designed to efficiently manage books, users, and borrowing operations in a library. The system allows libraries to register, manage their book inventory, handle user roles, and track book requests. It provides authentication for different user roles, ensuring secure access and control over library functions.\n\n### **Key Modules & Features**\n\n#### **1\\. Authentication & User Management**\n\n- **Library Registration** (`/auth/library/signup`) – Allows library owners to register their library.\n    \n- **User Signup** (`/auth/signup`) – Enables readers to create an account.\n    \n- **Role-Based Access** – Users can be assigned as **Reader, Admin, or Owner**.\n    \n- **Admin/User Management**\n    \n    - Owners can promote users to **Admin**.\n        \n    - Admins & Owners can **view all users, fetch user details, or delete user accounts**.\n        \n\n#### **2\\. Book Inventory Management**\n\n- **View Books** – Readers & Owners can see all available books.\n    \n- **Manage Books** (Owners & Admins only)\n    \n    - **Add, Update, Delete books**.\n        \n- **Issued Books** – Users can view their issued books.\n    \n- **Book Search**\n    \n    - Search by **Title, ISBN, Publisher, or Author**.\n        \n    - Get book details by **Book ID**.\n        \n\n**3\\. Book Requests**\n\n- **Request Handling** (Readers)\n    \n    - **Issue Request** – Readers can request books for borrowing.\n        \n    - **Return Request** – Readers can request to return books.\n        \n- **Request Approval** (Owners & Admins)\n    \n    - Accept or Reject book requests.\n        \n    - Fetch all requests, get a specific request by ID, or delete a request.\n        \n\n### **Technology Stack**\n\n- **Backend**: Golang (Gin Framework)\n    \n- **Database**: PostgreSQL\n    \n- **Authentication**: JWT-based authentication\n    \n- **API Documentation**: Postman",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38592065",
+		"_collection_link": "https://doctor-on-call.postman.co/workspace/Work~875ce25a-af2f-49d0-9647-4a44cd39652d/collection/38592065-efa6c269-cf3e-4c74-8d6a-b6aa0883aed9?action=share&source=collection_link&creator=38592065"
+	},
+	"item": [
+		{
+			"name": "Authentication",
+			"item": [
+				{
+					"name": "Login User",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"// Parse JSON response",
+									"var response = pm.response.json();",
+									"",
+									"// Extract the token (adjust the key as per your response)",
+									"var token = response.data ",
+									"",
+									"// Set token in environment variable",
+									"if (token) {",
+									"    pm.environment.set(\"token\", token);",
+									"}",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"owner@gmail.com\",\n    \"password\":\"Tvsbk0101@\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/login",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"login"
+							]
+						},
+						"description": "- Authenticates users using email and password.\n    \n- Returns an access token for secure API requests."
+					},
+					"response": [
+						{
+							"name": "Login User",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"owner1@gmail.com\",\n    \"password\":\"Tvsbk0101@\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/auth/login",
+									"path": [
+										"auth",
+										"login"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDE1NDA1MTUsInBheWxvYWQiOnsiSWQiOjEsIlJvbGUiOiJvd25lciIsIkxpYklkIjoxfX0.ni8tKIlN6sUHGl_ch5U_yOlKHrA0I4PFKd20LQcLRjQ\",\n    \"message\": \"successfully logged in\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Library Registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\":\"suraj singh\",\n    \"email\":\"owner2@gmail.com\",\n    \"password\":\"Tvsbk0101@\",\n    \"contact\":\"8448862886\",\n    \"libraryName\": \"Central Library\"\n  \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/library/signup",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"library",
+								"signup"
+							]
+						},
+						"description": "**Endpoint:** `POST /auth/library/signup`\n\nThis endpoint allows a new **library** to register along with its owner details."
+					},
+					"response": [
+						{
+							"name": "Signup library",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"name\":\"suraj singh\",\n    \"email\":\"owner2@gmail.com\",\n    \"password\":\"Tvsbk0101@\",\n    \"contact\":\"8448862886\",\n    \"libraryName\": \"Central Library\"\n  \n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/auth/library/signup",
+									"path": [
+										"auth",
+										"library",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Account created Successfully\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Reader Registration",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Sagar Bisht\",\n  \"email\": \"bisht@gmail.com\",\n  \"contact\":\"9876543110\",\n  \"password\": \"Tvsbk0101@\",\n  \"library_id\": 1\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/auth/signup",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"auth",
+								"signup"
+							]
+						},
+						"description": "**Endpoint:** `POST /auth/signup`  \n**Description:**  \nThis endpoint allows a **reader (library user)** to sign up for accessing library services."
+					},
+					"response": [
+						{
+							"name": "Reader Registration",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \"name\": \"Sagar Bisht\",\n  \"email\": \"bisht@gmail.com\",\n  \"contact\":\"9876543110\",\n  \"password\": \"Tvsbk0101@\",\n  \"library_id\": 1\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/auth/signup",
+									"path": [
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Account Created Successfully\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "The **Authentication** folder contains endpoints for managing user authentication within the Library Management System. These endpoints ensure secure access by handling user registration, login, and authentication."
+		},
+		{
+			"name": "Book Inventory API",
+			"item": [
+				{
+					"name": "Get All Books",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books"
+							]
+						},
+						"description": "**Endpoint:** `GET /books`  \n**Description:**  \nFetch a list of all books available in the library.\n\n- **Accessible by:** Readers, Library Owners, Admins"
+					},
+					"response": [
+						{
+							"name": "Get All Books",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/books",
+									"path": [
+										"books"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"authors\": \"F Scott Fitzgerald\",\n            \"available_copies\": 10,\n            \"created_at\": \"2025-03-04T23:04:26.580364+05:30\",\n            \"deleted_at\": null,\n            \"id\": 1,\n            \"isbn\": \"9876543210\",\n            \"lib_id\": 1,\n            \"publisher\": \"Scribner\",\n            \"title\": \"The Great Gatsby\",\n            \"total_copies\": 10,\n            \"updated_at\": \"2025-03-04T23:04:26.580364+05:30\",\n            \"version\": \"1st Edition\"\n        }\n    ],\n    \"message\": \"All Books Fetched\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Add Book",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": " {\n      \"title\": \"The Great Gatsby\",\n      \"isbn\":\"9876543210\",\n      \"authors\": \"F Scott Fitzgerald\",\n      \"publisher\": \"Scribner\",\n      \"version\": \"1st Edition\",\n      \"totalCopies\": 10,\n      \"availableCopies\": 10\n    }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books"
+							]
+						},
+						"description": "**Endpoint:** `POST /books`  \n**Description:**  \nAllows a library **owner or admin** to add a new book to the inventory.\n\n- **Accessible by:** Library Owners, Admins"
+					},
+					"response": [
+						{
+							"name": "Add Book",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": " {\n      \"title\": \"The Great Gatsby\",\n      \"isbn\":\"9876543210\",\n      \"authors\": \"F Scott Fitzgerald\",\n      \"publisher\": \"Scribner\",\n      \"version\": \"1st Edition\",\n      \"totalCopies\": 10,\n      \"availableCopies\": 10\n    }",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/book",
+									"path": [
+										"book"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully Added Book\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Issued Books for a Reader",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books/issued",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								"issued"
+							]
+						},
+						"description": "**ndpoint:** `GET /books/issued`  \n**Description:**  \nRetrieves a list of books that a **reader has issued**.\n\n- **Accessible by:** Readers"
+					},
+					"response": [
+						{
+							"name": "Get Issued Books for a Reader",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/books/issued",
+									"path": [
+										"books",
+										"issued"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"authors\": \"F Scott Fitzgerald\",\n            \"available_copies\": 15,\n            \"created_at\": \"2025-03-04T23:04:26.580364+05:30\",\n            \"deleted_at\": null,\n            \"expected_return_date\": \"2025-03-20T00:12:51.570506+05:30\",\n            \"id\": 1,\n            \"isbn\": \"9876543210\",\n            \"issue_approver_id\": 1,\n            \"issue_date\": \"2025-03-05T00:12:51.572184+05:30\",\n            \"issue_id\": 2,\n            \"issue_status\": \"issued\",\n            \"lib_id\": 1,\n            \"publisher\": \"Scribner\",\n            \"reader_id\": 5,\n            \"return_approver_id\": 0,\n            \"return_date\": null,\n            \"title\": \"The Great Gatsby\",\n            \"total_copies\": 17,\n            \"updated_at\": \"2025-03-05T00:12:51.572835+05:30\",\n            \"version\": \"1st Edition\"\n        }\n    ],\n    \"message\": \"fetched all books\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "GET BOOK BY ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/books/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "**Endpoint:** `GET /books/{book_id}`  \n**Description:** Fetch a single book's details using its **ID**.\n\n- **Accessible by:** Readers, Library Owners, Admins\n    \n\n**Example Request:** `/books/1`"
+					},
+					"response": [
+						{
+							"name": "GET BOOK BY ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/books/:id",
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"authors\": \"F Scott Fitzgerald\",\n        \"available_copies\": 15,\n        \"created_at\": \"2025-03-04T23:04:26.580364+05:30\",\n        \"deleted_at\": null,\n        \"id\": 1,\n        \"isbn\": \"9876543210\",\n        \"lib_id\": 1,\n        \"publisher\": \"Scribner\",\n        \"title\": \"The Great Gatsby\",\n        \"total_copies\": 17,\n        \"updated_at\": \"2025-03-05T00:12:51.572835+05:30\",\n        \"version\": \"1st Edition\"\n    },\n    \"message\": \"Successfully get Book\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Update Book Details",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n   \"title\":\"Under the Shadow\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "**Endpoint:** `PUT /books/{book_id}`  \n**Description:**  \nAllows a **library owner or admin** to update book details.\n\n- **Accessible by:** Library Owners, Admins"
+					},
+					"response": [
+						{
+							"name": "Update Book Details",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n   \"title\":\"Under the Shadow\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/books/:id",
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Updated Succesfully \",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Search Book",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \n    \"isbn\":\"9876543210\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/books/search",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"books",
+								"search"
+							]
+						},
+						"description": "**Endpoint:** `GET /books/search`  \n**Description:** Search books by **title, ISBN, publisher, or authors**.\n\n- **Accessible by:** Readers, Library Owners, Admins\n    \n\n**Query Parameters:**\n\n- `title` → Search by book title\n    \n- `isbn` → Search by ISBN\n    \n- `publisher` → Search by publisher\n    \n- `authors` → Search by authors"
+					},
+					"response": [
+						{
+							"name": "Search Book",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n  \n    \"isbn\":\"9876543210\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/books/search",
+									"path": [
+										"books",
+										"search"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"ID\": 1,\n            \"CreatedAt\": \"2025-03-04T23:04:26.580364+05:30\",\n            \"UpdatedAt\": \"2025-03-05T00:12:51.572835+05:30\",\n            \"DeletedAt\": null,\n            \"isbn\": \"9876543210\",\n            \"libraryId\": 1,\n            \"title\": \"The Great Gatsby\",\n            \"authors\": \"F Scott Fitzgerald\",\n            \"publisher\": \"Scribner\",\n            \"version\": \"1st Edition\",\n            \"totalCopies\": 17,\n            \"availableCopies\": 15,\n            \"Issues\": null,\n            \"Requests\": null\n        }\n    ],\n    \"message\": \"Successfully fetch all books\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete a Book",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"description": "**Endpoint:** `DELETE /books/{book_id}`  \n**Description:**  \nAllows a **library owner or admin** to remove a book from inventory.\n\n- **Accessible by:** Library Owners, Admins"
+					},
+					"response": [
+						{
+							"name": "Delete a Book",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "/books/:id",
+									"path": [
+										"books",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": ""
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully Deleted the  Book\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "The **Book Inventory** folder contains endpoints to manage books within the library.\n\n- **Readers & Owners** can view available books.\n    \n- **Library Owners & Admins** can add, update, and delete books.\n    \n- **Readers** can view books they have issued."
+		},
+		{
+			"name": "Issue Registries",
+			"item": [
+				{
+					"name": "GET ALL ISSUE Registry",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/issue_register",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"issue_register"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "GET ALL ISSUE Registry",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/issue_register",
+									"path": [
+										"issue_register"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"created_at\": \"2025-03-05T00:12:51.5722+05:30\",\n            \"expected_return_date\": \"2025-03-20T00:12:51.570506+05:30\",\n            \"isbn\": \"9876543210\",\n            \"issue_approver_id\": 1,\n            \"issue_date\": \"2025-03-05T00:12:51.572184+05:30\",\n            \"issue_id\": 2,\n            \"issue_status\": \"issued\",\n            \"reader_id\": 5,\n            \"return_approver_id\": 0,\n            \"return_date\": null,\n            \"updated_at\": \"2025-03-05T00:12:51.5722+05:30\"\n        }\n    ],\n    \"message\": \"Successfully fetched all issue\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Book Request API",
+			"item": [
+				{
+					"name": "Create a New Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"bookId\":1,\n    \"requestType\":\"issue\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/request",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"request"
+							]
+						},
+						"description": "**Endpoint:** `POST /requests`  \n**Accessible by:** **Readers**\n\n**Description:** A reader can request to **issue** or **return** a book."
+					},
+					"response": [
+						{
+							"name": "Create a New  Issue Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bookId\":1,\n    \"requestType\":\"issue\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/request",
+									"path": [
+										"request"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Request Successfully Created\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "Create a New Return  Request",
+							"originalRequest": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"bookId\":1,\n    \"requestType\":\"return\"\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/request",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"request"
+									]
+								}
+							},
+							"status": "Created",
+							"code": 201,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Request Successfully Created\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Update a Request (Accept/Reject)",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"requestType\":\"accepted\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/request/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"request",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "**Endpoint:** `PUT /requests/{request_id}`  \n**Accessible by:** **Owners, Admins**\n\n**Description:** accepted or rejected a request made by a reader"
+					},
+					"response": [
+						{
+							"name": "Update a  Request (Accept)",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"requestType\":\"accepted\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/request/:id",
+									"path": [
+										"request",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully Updated the request\",\n    \"success\": true\n}"
+						},
+						{
+							"name": "Update a Request (Reject)",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"requestType\":\"rejected\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{BASE_URL}}/request/:id",
+									"host": [
+										"{{BASE_URL}}"
+									],
+									"path": [
+										"request",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully Updated the request\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get My Requests",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/request",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"request"
+							]
+						},
+						"description": "**Endpoint:** `GET /requests/my`  \n**Accessible by:** **Readers**\n\n**Description:** Fetch all requests made by the currently logged-in reader."
+					},
+					"response": [
+						{
+							"name": "Get My Requests",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/request",
+									"path": [
+										"request"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"requestId\": 3,\n            \"bookId\": 1,\n            \"readerId\": 5,\n            \"requestDate\": \"2025-03-05T00:11:06.67739+05:30\",\n            \"approvalDate\": \"2025-03-05T00:14:32.701629+05:30\",\n            \"approverId\": 1,\n            \"requestType\": \"issue\",\n            \"requestStatus\": \"rejected\",\n            \"Book\": {\n                \"ID\": 1,\n                \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n                \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n                \"DeletedAt\": null,\n                \"isbn\": \"9876543210\",\n                \"libraryId\": 0,\n                \"title\": \"The Great Gatsby\",\n                \"authors\": \"\",\n                \"publisher\": \"\",\n                \"version\": \"\",\n                \"totalCopies\": 0,\n                \"availableCopies\": 0,\n                \"Issues\": null,\n                \"Requests\": null\n            }\n        }\n    ],\n    \"message\": \"successfully fetched all requests\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get Request by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/request/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"request",
+								""
+							]
+						},
+						"description": "**Endpoint:** `GET /requests/{request_id}`  \n**Accessible by:** **Owners, Admins, Readers (for their own requests)**\n\n**Example Request:** `/requests/101`"
+					},
+					"response": [
+						{
+							"name": "Get Request by ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/request/",
+									"path": [
+										"request",
+										""
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"requestId\": 3,\n        \"bookId\": 1,\n        \"readerId\": 5,\n        \"requestDate\": \"2025-03-05T00:11:06.67739+05:30\",\n        \"approvalDate\": \"2025-03-05T00:14:32.701629+05:30\",\n        \"approverId\": 0,\n        \"requestType\": \"issue\",\n        \"requestStatus\": \"rejected\",\n        \"Book\": {\n            \"ID\": 1,\n            \"CreatedAt\": \"0001-01-01T00:00:00Z\",\n            \"UpdatedAt\": \"0001-01-01T00:00:00Z\",\n            \"DeletedAt\": null,\n            \"isbn\": \"9876543210\",\n            \"libraryId\": 0,\n            \"title\": \"The Great Gatsby\",\n            \"authors\": \"\",\n            \"publisher\": \"\",\n            \"version\": \"\",\n            \"totalCopies\": 0,\n            \"availableCopies\": 0,\n            \"Issues\": null,\n            \"Requests\": null\n        }\n    },\n    \"message\": \"Successfully Fetched the request\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All Requests",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/request/all",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"request",
+								"all"
+							]
+						},
+						"description": "**Endpoint:** `GET /requests/all`  \n**Accessible by:** **Owners, Admins**\n\n**Description:** Fetch all requests from all readers."
+					},
+					"response": [
+						{
+							"name": "Get All Requests",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/request/all",
+									"path": [
+										"request",
+										"all"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"approval_date\": \"2025-03-05T00:14:32.701629+05:30\",\n            \"approver_id\": 1,\n            \"book_id\": 1,\n            \"reader_id\": 5,\n            \"req_id\": 3,\n            \"request_date\": \"2025-03-05T00:11:06.67739+05:30\",\n            \"request_status\": \"rejected\",\n            \"request_type\": \"issue\",\n            \"title\": \"The Great Gatsby\"\n        }\n    ],\n    \"message\": \"successfully fetched all requests\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete a Request",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/request/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"request",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "1"
+								}
+							]
+						},
+						"description": "**Endpoint:** `DELETE /requests/{request_id}`  \n**Accessible by:** **Owners, Admins**\n\n**Example Request:** `/requests/101`"
+					},
+					"response": [
+						{
+							"name": "Delete a Request",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "/request/:id",
+									"path": [
+										"request",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "1"
+										}
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Succesfully Deleted the Request\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "The **Book Request API** handles book issue and return requests.\n\n- **Readers** can request to **issue** or **return** a book.\n    \n- **Owners/Admins** can **approve, reject, or update** requests.\n    \n- **Admins & Owners** can **view all requests**.\n    \n- **Readers** can **view their own requests**."
+		},
+		{
+			"name": "Users API",
+			"item": [
+				{
+					"name": "Change User Role to Admin",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\":3,\n    \"role\":\"admin\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{BASE_URL}}/users/make_admin",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								"make_admin"
+							]
+						},
+						"description": "**Endpoint:** `PUT /users/make_admin`  \n**Accessible by:** **Owners**\n\n**Description:** The owner can promote a user to an admin."
+					},
+					"response": [
+						{
+							"name": "Change User Role to Admin",
+							"originalRequest": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\":3,\n    \"role\":\"admin\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "/users/make_admin",
+									"path": [
+										"users",
+										"make_admin"
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"Successfully Change Role of the user\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get All User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								""
+							]
+						},
+						"description": "**Endpoint:** `GET /users`  \n**Accessible by:** **Admins, Owners**\n\n**Description:** Fetch a list of all registered users."
+					},
+					"response": [
+						{
+							"name": "Get All User",
+							"originalRequest": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "/users/",
+									"path": [
+										"users",
+										""
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": [\n        {\n            \"ID\": 3,\n            \"CreatedAt\": \"2025-03-04T22:57:36.563394+05:30\",\n            \"UpdatedAt\": \"2025-03-04T23:35:30.084169+05:30\",\n            \"DeletedAt\": null,\n            \"name\": \"Sagar Bisht\",\n            \"email\": \"bisht@gmail.com\",\n            \"contact\": \"9876543110\",\n            \"role\": \"admin\",\n            \"libraryId\": 1,\n            \"Auth\": {\n                \"email\": \"\",\n                \"password\": \"\"\n            }\n        }\n    ],\n    \"message\": \"successfully fetched all users\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Get User by ID",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users/:id",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "**Endpoint:** `GET /users/{user_id}`  \n**Accessible by:** **Admins, Owners, User (own account only)**\n\n**Example Request:** `/users/20`"
+					},
+					"response": [
+						{
+							"name": "Get User by ID",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "/users/:id",
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"data\": {\n        \"ID\": 3,\n        \"CreatedAt\": \"2025-03-04T22:57:36.563394+05:30\",\n        \"UpdatedAt\": \"2025-03-04T23:38:19.743559+05:30\",\n        \"DeletedAt\": null,\n        \"name\": \"Sagar Bisht\",\n        \"email\": \"bisht@gmail.com\",\n        \"contact\": \"9876543110\",\n        \"role\": \"admin\",\n        \"libraryId\": 1,\n        \"Auth\": {\n            \"email\": \"\",\n            \"password\": \"\"\n        }\n    },\n    \"message\": \"successfully fetched user\",\n    \"success\": true\n}"
+						}
+					]
+				},
+				{
+					"name": "Delete User Account",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{token}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{BASE_URL}}/users?id=3",
+							"host": [
+								"{{BASE_URL}}"
+							],
+							"path": [
+								"users"
+							],
+							"query": [
+								{
+									"key": "id",
+									"value": "3"
+								}
+							]
+						},
+						"description": "**Endpoint:** `DELETE /users/{user_id}`  \n**Accessible by:** **Admins, Owners**\n\n**Example Request:** `/users/?id=3`"
+					},
+					"response": [
+						{
+							"name": "Delete User Account",
+							"originalRequest": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "/users?id=3",
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": "id",
+											"value": "3"
+										}
+									]
+								}
+							},
+							"status": "Accepted",
+							"code": 202,
+							"_postman_previewlanguage": null,
+							"header": null,
+							"cookie": [],
+							"body": "{\n    \"message\": \"successfully deleted user\",\n    \"success\": true\n}"
+						}
+					]
+				}
+			],
+			"description": "The **User API** handles user-related operations, including role management.\n\n- **Owners** can promote a **user to an admin**.\n    \n- **Admins & Owners** can **view all users**.\n    \n- **Users** can **view their details**.\n    \n- **Admins & Owners** can **delete a user account**."
+		}
+	]
+}

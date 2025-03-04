@@ -9,3 +9,8 @@ export const getAllUsers = async() =>{
     return response.data.data
 
 }
+
+export const updateUser= async(payload) =>{
+    const response = await authAxios.patch(`${URL}make_admin` , payload)
+    return response.data.data
+}
